@@ -5,22 +5,30 @@ function Home() {
   const [teamId, setTeamId] = useState("");
   const [channelName, setChannelName] = useState("");
   const [loading, setLoading] = useState(false);
-  const API_URL = import.meta.env.VITE_API_URL;
+
+  // URL base del backend (hardcodeada)
+  const API_URL = "https://channelslack-backend.vercel.app/api-rest/slack";
 
   const handleSlackAuth = () => {
-    window.location.href = `${API_URL}/auth/slack`;
+    // 🔥 Redirección directa a la ruta que inicia OAuth
+    window.location.href = `${API_URL}/install`;
   };
 
   const handleCreateChannel = async () => {
-    if (!teamId || !channelName) return alert("Completa todos los campos");
+    if (!teamId || !channelName) {
+      alert("Completa todos los campos");
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/create-channel`, {
+      const res = await axios.post(`${API_URL}/create`, {
         teamId,
         channelName,
       });
       alert(`✅ Canal creado: ${res.data.channelName}`);
     } catch (err) {
+      console.error(err);
       alert("❌ Error al crear el canal");
     } finally {
       setLoading(false);
@@ -29,9 +37,14 @@ function Home() {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center vh-100 bg-light">
-      <div className="container text-center p-4 shadow-lg rounded bg-white" style={{ maxWidth: "500px" }}>
+      <div
+        className="container text-center p-4 shadow-lg rounded bg-white"
+        style={{ maxWidth: "500px" }}
+      >
         <h2 className="text-dark mb-3 fw-bold">Slack Channel Automation</h2>
-        <p className="text-muted mb-4 fs-5">Automatiza la creación de tus canales en Slack</p>
+        <p className="text-muted mb-4 fs-5">
+          Automatiza la creación de tus canales en Slack
+        </p>
 
         <button onClick={handleSlackAuth} className="btn btn-primary w-100 mb-4">
           <i className="bi bi-slack me-2"></i>Autorizar con Slack
