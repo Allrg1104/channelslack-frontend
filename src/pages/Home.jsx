@@ -8,7 +8,7 @@ function Home() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSlackAuth = () => {
-    window.location.href = `${API_URL}/api-rest/slack/auth/slack`;
+    window.location.href = `${API_URL}/auth/slack`;
   };
 
   const handleCreateChannel = async () => {
